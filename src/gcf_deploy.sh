@@ -18,4 +18,4 @@ gcloud functions deploy set-crawler \
     --set-env-vars="BQ_DATASET"=$BQ_DATASET \
     --set-env-vars="BQ_PRICE_TABLE_NAME"=$BQ_PRICE_TABLE_NAME \
     --set-env-vars="BQ_STOCK_TABLE_NAME"=$BQ_STOCK_TABLE_NAME \
-    --timeout 60s
+    --timeout 540s

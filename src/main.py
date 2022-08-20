@@ -8,6 +8,9 @@ import config
 import utils
 import base64
 import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_pubsub_message(event, context):
     """Triggered from a message on a Cloud Pub/Sub topic.
@@ -20,6 +23,7 @@ def get_pubsub_message(event, context):
 
 def get_list_of_stock_symbol():
     
+    logger.info("Getting all symbol")
     prefix = ['NUMBER'] + list(string.ascii_uppercase)
     all_symbol = []
     for p in prefix:
@@ -39,24 +43,27 @@ def get_list_of_stock_symbol():
     return all_symbol
 
 
-def get_stock_price(event, context):
+
+def get_stock_price(all_symbol, prev_day):
+    yf_ticker = [f"{s}.BK" for s in all_symbol['Symbol'].values]
+    yf_ticker = ' '.join(yf_ticker)
+    history = yf.download(tickers=yf_ticker,start=prev_day)
+    history = history.stack(level=1).reset_index().copy()
+    history['level_1'] = history['level_1'].apply(lambda s: s.split(".")[0])
+    history.rename(columns={"level_1":"Symbol","Date":"RecordDate","Adj Close":"AdjClose","Company/Security Name":"Name"},inplace=True)
+    return history
+
+    
+def main(event, context)
     
     messages = get_pubsub_message(event, context)
     if messages == "monthly update stock":
         pass
     else:
         raise Exception(f"{messages} messages does not support")
-    
+        
     current = dt.datetime.now()
     prev_7d = current - dt.timedelta(days=7)
     all_symbol = get_list_of_stock_symbol()
-    yf_ticker = [f"{s}.BK" for s in all_symbol['Symbol'].values]
-    yf_ticker = ' '.join(yf_ticker)
-    history = yf.download(tickers=yf_ticker,start=prev_7d)
-    history = history.stack(level=1).reset_index().copy()
-    history['level_1'] = history['level_1'].apply(lambda s: s.split(".")[0])
-    history.rename(columns={"level_1":"Symbol","Date":"RecordDate","Adj Close":"AdjClose","Company/Security Name":"Name"},inplace=True)
-    utils.write_dataframe_to_bq(dataframe=history,table_name=config.BQ_PRICE_TABLE_NAME)
-    
-    
-
+    price = get_stock_price(all_symbol=all_symbol, prev_day=prev_7d)
+    utils.write_dataframe_to_bq(dataframe=price,table_name=config.BQ_PRICE_TABLE_NAME)

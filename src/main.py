@@ -6,6 +6,8 @@ import datetime as dt
 import string
 import config
 import utils
+import base64
+import time
 
 def get_pubsub_message(event, context):
     """Triggered from a message on a Cloud Pub/Sub topic.
@@ -20,7 +22,7 @@ def get_list_of_stock_symbol():
     
     prefix = ['NUMBER'] + list(string.ascii_uppercase)
     all_symbol = []
-    for p in tqdm(prefix):
+    for p in prefix:
         url="https://classic.set.or.th/set/commonslookup.do?"
         res = requests.get(url=url,
                           params={

@@ -1,12 +1,7 @@
-autopep8==1.5.7
-black==19.10b0
-jupyterlab==3.0.14
-matplotlib==3.3.4
 numpy==1.20.2
 openpyxl==3.0.7
 pandas==1.2.4
 pyarrow==5.0.0
+yfinance==0.1.74
 google-cloud-bigquery==2.17.0
-google-cloud-storage==1.42.3
-google-cloud-logging==2.6.0
 google-cloud-pubsub==2.8.0

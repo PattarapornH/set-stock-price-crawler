@@ -5,7 +5,7 @@ echo "BQ daataset name $BQ_DATASET"
 echo "BQ price table name $BQ_PRICE_TABLE_NAME"
 echo "BQ stock table name $BQ_STOCK_TABLE_NAME"
 
-gcloud functions deploy nssf-start-vm \
+gcloud functions deploy set-crawler \
     --entry-point get_stock_price \
     --source . \
     --project $GCP_PROJECT \

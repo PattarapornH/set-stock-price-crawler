@@ -12,7 +12,7 @@ gcloud functions deploy set-crawler \
     --runtime python39\
     --region $GCP_FUNCTION_REGION \
     --trigger-topic $GCP_TOPIC_STOCK_CRAWLING  \
-    --memory 256MB \
+    --memory 2GB \
     --max-instances 1 \
     --set-env-vars="GCP_PROJECT"=$GCP_PROJECT \
     --set-env-vars="BQ_DATASET"=$BQ_DATASET \

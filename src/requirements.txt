@@ -1,7 +1,9 @@
 numpy==1.20.2
 openpyxl==3.0.7
 pandas==1.2.4
+pandas-gbq==0.17.8
 pyarrow==5.0.0
 yfinance==0.1.74
+bs4==0.0.1
 google-cloud-bigquery==2.17.0
 google-cloud-pubsub==2.8.0

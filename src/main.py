@@ -54,7 +54,7 @@ def get_stock_price(all_symbol, prev_day):
     return history
 
     
-def main(event, context)
+def main(event, context):
     
     messages = get_pubsub_message(event, context)
     if messages == "monthly update stock":

@@ -51,6 +51,10 @@ def get_stock_price(event, context):
     yf_ticker = [f"{s}.BK" for s in all_symbol['Symbol'].values]
     yf_ticker = ' '.join(yf_ticker)
     history = yf.download(tickers=yf_ticker,start=prev_7d)
+    history = history.stack(level=1).reset_index().copy()
+    history['level_1'] = history['level_1'].apply(lambda s: s.split(".")[0])
+    history.rename(columns={"level_1":"Symbol","Date":"RecordDate","Adj Close":"AdjClose","Company/Security Name":"Name"},inplace=True)
+    utils.write_dataframe_to_bq(dataframe=history,table_name=config.BQ_PRICE_TABLE_NAME)
     
     
 

@@ -67,3 +67,10 @@ def main(event, context):
     all_symbol = get_list_of_stock_symbol()
     price = get_stock_price(all_symbol=all_symbol, prev_day=prev_7d)
     utils.write_dataframe_to_bq(dataframe=price,table_name=config.BQ_PRICE_TABLE_NAME)
+
+    delete_outdated_query = f"""
+    DELETE `{config.GCP_PROJECT}.{config.BQ_DATASET}.{config.BQ_PRICE_TABLE_NAME}`
+    WHERE RecordDate < DATE_SUB(CURRENT_DATE("Asia/Bangkok"),INTERVAL 1 YEAR)
+    """
+
+    utils.query_table(query=delete_outdated_query)

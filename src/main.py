@@ -70,7 +70,7 @@ def main(event, context):
 
     delete_outdated_query = f"""
     DELETE `{config.GCP_PROJECT}.{config.BQ_DATASET}.{config.BQ_PRICE_TABLE_NAME}`
-    WHERE RecordDate < DATE_SUB(CURRENT_DATE("Asia/Bangkok"),INTERVAL 1 YEAR)
+    WHERE DATE(RecordDate) < DATE_SUB(CURRENT_DATE("Asia/Bangkok"),INTERVAL 1 YEAR)
     """
 
     utils.query_table(query=delete_outdated_query)
